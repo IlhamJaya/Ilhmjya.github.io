@@ -100,6 +100,7 @@ const App = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isTypingComplete, setIsTypingComplete] = useState(false);
   const [typingDots, setTypingDots] = useState('.');
+  const [isScrolled, setIsScrolled] = useState(false);
 
   // Script cerita AI yang akan diketik
   const aiStoryScript = `Halo. Izinkan saya mengambil alih layar ini sebentar.
@@ -124,6 +125,16 @@ Silakan tutup pesan ini, dan mari kita mulai sesuatu yang hebat.`;
     };
     window.addEventListener('mousemove', handleMouseMove);
     return () => window.removeEventListener('mousemove', handleMouseMove);
+  }, []);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 12);
+    };
+
+    handleScroll();
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
   useEffect(() => {
@@ -189,7 +200,13 @@ Silakan tutup pesan ini, dan mari kita mulai sesuatu yang hebat.`;
       <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] rounded-full bg-[#2EA043]/15 blur-[120px] z-0 mix-blend-screen" />
 
       {/* Navbar Simple */}
-      <nav className="fixed w-full z-40 top-0 pt-6 px-6 md:px-12 mix-blend-difference">
+      <nav
+        className={`fixed top-0 w-full z-40 px-6 md:px-12 backdrop-blur-xl transition-all duration-300 ${
+          isScrolled
+            ? 'py-3.5 bg-[#0D1117]/95 border-b border-[#30363D] shadow-[0_8px_30px_rgba(1,4,9,0.45)]'
+            : 'py-4 bg-[#0D1117]/55 border-b border-[#30363D]/60'
+        }`}
+      >
         <div className="max-w-6xl mx-auto flex justify-between items-center">
           <span className="font-semibold text-[#F0F6FC] tracking-wide text-lg">
             Profile<span className="text-[#2EA043]">.</span>
@@ -200,18 +217,25 @@ Silakan tutup pesan ini, dan mari kita mulai sesuatu yang hebat.`;
         </div>
       </nav>
 
-      <main className="relative z-10 px-6 md:px-12">
+      <main className="relative z-10 px-6 md:px-12 pt-24 md:pt-28">
         <div className="max-w-5xl mx-auto">
 
           {/* SECTION 1: HERO */}
-          <section className="min-h-[90vh] flex flex-col justify-center pt-20">
+          <section className="min-h-[90vh] flex flex-col justify-center pt-8">
             <RevealOnScroll>
-              <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#161B22]/70 border border-[#30363D] backdrop-blur-sm mb-8 text-sm text-[#8B949E]">
-                <span className="relative flex h-2 w-2">
-                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#2EA043] opacity-75"></span>
-                  <span className="relative inline-flex rounded-full h-2 w-2 bg-[#2EA043]"></span>
-                </span>
-                Tersedia untuk kolaborasi
+              <div className="mb-8 flex items-center gap-4">
+                <img
+                  src="/profil.png"
+                  alt="Foto profil Ilham Jaya"
+                  className="w-16 h-16 md:w-20 md:h-20 rounded-2xl object-cover border border-[#30363D] shadow-[0_0_30px_rgba(46,160,67,0.15)]"
+                />
+                <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#161B22]/70 border border-[#30363D] backdrop-blur-sm text-sm text-[#8B949E]">
+                  <span className="relative flex h-2 w-2">
+                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#2EA043] opacity-75"></span>
+                    <span className="relative inline-flex rounded-full h-2 w-2 bg-[#2EA043]"></span>
+                  </span>
+                  Tersedia untuk kolaborasi
+                </div>
               </div>
             </RevealOnScroll>
             
